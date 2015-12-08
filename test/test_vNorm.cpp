@@ -2,7 +2,7 @@
 
 bool test_vNorm() {
 	std::vector<double> vec;
-	int vecLength = 10000000;
+	int vecLength = 300000000;
 	for (int i = 0; i < vecLength; i++) {
 		vec.push_back(1.0);
 	}
