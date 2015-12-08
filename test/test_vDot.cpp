@@ -3,7 +3,7 @@
 bool test_vDot() {
 	std::vector<double> vec1;
 	std::vector<double> vec2;
-	int vecLength = 100000000;
+	int vecLength = 103121;
 	for (int i = 0; i < vecLength; i++) {
 		vec1.push_back(1.0);
 		vec2.push_back(2.0);
@@ -17,10 +17,14 @@ bool test_vDot() {
 	end = clock();
 	timeF = double(end - begin) / CLOCKS_PER_SEC;
 
-	begin = clock();
-	dotS = vDotS(vec1, vec2);
-	end = clock();
-	timeS = double(end - begin) / CLOCKS_PER_SEC;
+	if (rank == 0) {
+		begin = clock();
+		dotS = vDotS(vec1, vec2);
+		end = clock();
+		timeS = double(end - begin) / CLOCKS_PER_SEC;
+	} else {
+		timeS = 0;
+	}
 
 	MPI_Allreduce(&timeS, &reducedTimeS, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 	MPI_Allreduce(&timeF, &reducedTimeF, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);

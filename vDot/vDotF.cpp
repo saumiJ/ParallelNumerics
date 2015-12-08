@@ -10,32 +10,26 @@ double vDotF(std::vector<double> vec1, std::vector<double> vec2) {
 		return DBL_MAX;
 	}
 
-	double sum, reducedSum;
+	double sum = 0, reducedSum;
 
 	std::vector<double> dotPart;
-	int workSize, gridOffset, currentVecLength, vectorStart;
+	int workSize, gridOffset, currentVecLength, loopLimit;
 
 	currentVecLength = vec1Length;
-	vectorStart = 0;
 
-	while (currentVecLength > 0) {
-		if (currentVecLength > size-1) {
-			workSize = currentVecLength / size;
-			gridOffset = vectorStart + rank * workSize;
-
-			for (int i = gridOffset; i < gridOffset + workSize; i++) {
-				sum += vec1[i] * vec2[i];
-			}
-
-			currentVecLength -= size * workSize;
-			vectorStart += size * workSize;
-		} else {
-			if (rank + 1 <= currentVecLength % size) {
-				sum += vec1[vectorStart + rank] * vec2[vectorStart + rank];
-			}
-			currentVecLength = 0;
-		}
+	workSize = currentVecLength / size;
+	gridOffset = rank * workSize;
+	loopLimit = gridOffset + workSize;
+	for (int i = gridOffset; i < loopLimit; i++) {
+		sum += vec1[i] * vec2[i];
 	}
+
+	currentVecLength -= size * workSize;
+
+	if (rank + 1 <= currentVecLength % size) {
+		sum += vec1[size * workSize + rank] * vec2[size * workSize + rank];
+	}
+	currentVecLength = 0;
 
 	MPI_Allreduce(&sum, &reducedSum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 

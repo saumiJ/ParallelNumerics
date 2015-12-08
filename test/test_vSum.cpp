@@ -2,7 +2,7 @@
 
 bool test_vSum() {
 	std::vector<double> vec;
-	int vecLength = 300000000;
+	int vecLength = 103021;
 	for (int i = 0; i < vecLength; i++) {
 		vec.push_back(1.0);
 	}
@@ -15,10 +15,14 @@ bool test_vSum() {
 	end = clock();
 	timeF = double(end - begin) / CLOCKS_PER_SEC;
 
-	begin = clock();
-	sumS = vSumS(vec);
-	end = clock();
-	timeS = double(end - begin) / CLOCKS_PER_SEC;
+	if (rank == 0) {
+		begin = clock();
+		sumS = vSumS(vec);
+		end = clock();
+		timeS = double(end - begin) / CLOCKS_PER_SEC;
+	} else {
+		timeS = 0;
+	}
 
 	MPI_Allreduce(&timeS, &reducedTimeS, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 	MPI_Allreduce(&timeF, &reducedTimeF, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
