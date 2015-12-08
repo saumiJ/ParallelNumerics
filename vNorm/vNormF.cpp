@@ -1,21 +1,15 @@
 #include "../vSum/vSum.hpp"
-#include "vDot.hpp"
+#include "vNorm.hpp"
 
-double vDotF(std::vector<double> vec1, std::vector<double> vec2) {
-	size_t vec1Length = vec1.size();
-	size_t vec2Length = vec2.size();
-
-	if (vec1Length != vec2Length) {
-		std::cout << "vDotF: ERROR! Vector lengths do not match. Result invalid." << std::cout;
-		return DBL_MAX;
-	}
+double vNormF(std::vector<double> vec) {
+	size_t vecLength = vec.size();
 
 	double result;
 
 	std::vector<double> dotPart;
 	int workSize, gridOffset, currentVecLength, vectorStart;
 
-	currentVecLength = vec1Length;
+	currentVecLength = vecLength;
 	vectorStart = 0;
 
 	while (currentVecLength > 0) {
@@ -24,21 +18,21 @@ double vDotF(std::vector<double> vec1, std::vector<double> vec2) {
 			gridOffset = vectorStart + rank * workSize;
 
 			for (int i = gridOffset; i < gridOffset + workSize; i++) {
-				dotPart.push_back(vec1[i]*vec2[i]);
+				dotPart.push_back(vec[i]*vec[i]);
 			}
 
 			currentVecLength -= size * workSize;
 			vectorStart += size * workSize;
 		} else {
 			if (rank + 1 <= currentVecLength % size) {
-				dotPart.push_back(vec1[vectorStart + rank]*vec2[vectorStart + rank]);
+				dotPart.push_back(vec[vectorStart + rank]*vec[vectorStart + rank]);
 			}
 			currentVecLength = 0;
 		}
 	}
 
 	std::vector<double> dotFull;
-	dotFull.reserve(vec1Length);
+	dotFull.reserve(vecLength);
 
 	if (rank == 0) {
 		dotFull.insert(dotFull.end(), dotPart.begin(), dotPart.end());
@@ -54,14 +48,16 @@ double vDotF(std::vector<double> vec1, std::vector<double> vec2) {
 		size_t sendSize = dotPart.size();
 		MPI_Send(&sendSize, 1, MPI_UNSIGNED, 0, 0, MPI_COMM_WORLD);
 		MPI_Send(&dotPart[0], sendSize, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
-		dotFull.resize(vec1Length);
+		dotFull.resize(vecLength);
 	}
 
 	MPI_Barrier(MPI_COMM_WORLD);
 
-	MPI_Bcast(&dotFull[0], vec1Length, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Bcast(&dotFull[0], vecLength, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
 	result = vSumF(dotFull);
+
+	result = sqrt(result);
 
 	return result;
 }

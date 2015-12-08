@@ -5,7 +5,7 @@ double vSumF(std::vector<double> vec) {
 	double result = 0;
 
 	double sum = 0, reducedSum;
-	size_t workSize, gridOffset, currentVecLength, vectorStart;
+	int workSize, gridOffset, currentVecLength, vectorStart;
 
 	currentVecLength = vecLength;
 	vectorStart = 0;
@@ -16,7 +16,7 @@ double vSumF(std::vector<double> vec) {
 			workSize = currentVecLength / size;
 			gridOffset = vectorStart + rank * workSize;
 
-			for (size_t i = gridOffset; i < gridOffset + workSize; i++) {
+			for (int i = gridOffset; i < gridOffset + workSize; i++) {
 				sum += vec[i];
 			}
 

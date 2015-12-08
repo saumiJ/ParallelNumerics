@@ -1,22 +1,22 @@
 #include "test.hpp"
 
-bool test_vSum() {
+bool test_vNorm() {
 	std::vector<double> vec;
 	int vecLength = 10000000;
 	for (int i = 0; i < vecLength; i++) {
 		vec.push_back(1.0);
 	}
 
-	double sumF, sumS, timeF, timeS, reducedTimeF, reducedTimeS;
+	double normF, normS, timeF, timeS, reducedTimeF, reducedTimeS;
 	clock_t begin, end;
 
 	begin = clock();
-	sumF = vSumF(vec);
+	normF = vNormF(vec);
 	end = clock();
 	timeF = double(end - begin) / CLOCKS_PER_SEC;
 
 	begin = clock();
-	sumS = vSumS(vec);
+	normS = vNormS(vec);
 	end = clock();
 	timeS = double(end - begin) / CLOCKS_PER_SEC;
 
@@ -24,8 +24,8 @@ bool test_vSum() {
 	MPI_Allreduce(&timeF, &reducedTimeF, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
 	if (rank == 0) {
-		std::cout << "vSumF(vec): " << sumF << ", runtime: " << reducedTimeF << std::endl;
-		std::cout << "vSumS(vec): " << sumS << ", runtime: " << reducedTimeS << std::endl;
+		std::cout << "vNormF(vec): " << normF << ", runtime: " << reducedTimeF << std::endl;
+		std::cout << "vNormS(vec): " << normS << ", runtime: " << reducedTimeS << std::endl;
 	}
 
 	return true;

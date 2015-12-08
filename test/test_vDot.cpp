@@ -3,8 +3,8 @@
 bool test_vDot() {
 	std::vector<double> vec1;
 	std::vector<double> vec2;
-	size_t vecLength = 5000000;
-	for (size_t i = 0; i < vecLength; i++) {
+	int vecLength = 10000000;
+	for (int i = 0; i < vecLength; i++) {
 		vec1.push_back(1.0);
 		vec2.push_back(2.0);
 	}
