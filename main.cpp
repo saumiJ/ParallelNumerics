@@ -1,21 +1,29 @@
 #include "test/test.hpp"
 #include <mpi/mpi.h>
 
-int rank, size;
+int rank, size;		// Global external variables
 
-int main() {
-	MPI_Init(NULL, NULL);
+int main(int argc, char** argv) {
+	MPI_Init(&argc, &argv);			// Initialize MPI environment
 
-	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);	// Get rank (procID)
+	MPI_Comm_size(MPI_COMM_WORLD, &size);	// Get size (#procs)
 
 	if (rank == 0) {
 		std::cout << "Number of processes: " << size << std::endl;
 	}
 
-	test_all();
+	bool wereTestsSuccessful = test_all();	// Check if tests pass
 
-	MPI_Finalize();
+	if (rank == 0) {
+		if(wereTestsSuccessful) {
+			std::cout << "Tests successful!" << std::endl;
+		} else {
+			std::cout << "Tests failed!" << std::endl;
+		}
+	}
 
-	return 1;
+	MPI_Finalize();		// Conclude MPI
+
+	return 0;
 }

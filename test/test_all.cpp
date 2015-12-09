@@ -2,11 +2,11 @@
 
 bool test_all() {
 
-	bool doAllTestsPass = false;
+	bool doAllTestsPass = false;	// Pass/fail flag
 
-	doAllTestsPass = test_vSum();
-	doAllTestsPass = test_vDot();
-	doAllTestsPass = test_vNorm();
+	doAllTestsPass = test_vSum();	// Test vSum
+	doAllTestsPass = test_vDot();	// Test vDot
+	doAllTestsPass = test_vNorm();	// Test vNorm
 
 	return doAllTestsPass;
 }
