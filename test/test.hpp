@@ -1,6 +1,10 @@
 #ifndef TEST_HPP
 #define TEST_HPP
 
+/*
+ * Header for tests. Add tests here for new functions.
+ */
+
 #include <vector>
 #include <ctime>
 #include <cstdlib>
@@ -11,9 +15,9 @@
 
 extern int rank, size;
 
-bool test_all();
-bool test_vSum();
-bool test_vDot();
-bool test_vNorm();
+bool test_all();	// Calls all tests
+bool test_vSum();	// Test vSum functions
+bool test_vDot();	// Test vDot functions
+bool test_vNorm();	// Test vNorm functions
 
 #endif /* TEST_HPP */

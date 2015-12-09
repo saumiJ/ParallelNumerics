@@ -9,6 +9,10 @@ int main() {
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+	if (rank == 0) {
+		std::cout << "Number of processes: " << size << std::endl;
+	}
+
 	test_all();
 
 	MPI_Finalize();

@@ -7,7 +7,7 @@ Help(vars.GenerateHelpText(env))
 
 conf = Configure(env)
 
-env.Append(CCFLAGS = ["-g3", "-O3", "-Wall", "-std=c++11"])
+env.Append(CCFLAGS = ["-g3", "-O0", "-Wall", "-std=c++11"])
 
 env["CXX"] = 'mpic++'
 env = conf.Finish()

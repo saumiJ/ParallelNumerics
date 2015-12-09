@@ -5,9 +5,15 @@
 #include <vector>
 #include <mpi/mpi.h>
 
-extern int rank, size;
+/*
+ * Header for vector-sum implementations. Add implementation for vector-sum here.
+ * TODO: Implement proper fan-in for O(log(n))
+ * TODO: Template calls
+ */
 
-double vSumF(std::vector<double> vec);
-double vSumS(std::vector<double> vec);
+extern int rank, size;	// rank and size global to whole project
+
+double vSumF(std::vector<double> vec);	// Parallel vector-sum
+double vSumS(std::vector<double> vec);	// Serial vector-sum
 
 #endif /* VSUM_HPP */
